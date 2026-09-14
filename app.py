@@ -77,7 +77,13 @@ def init_state(data_file, labels_file):
         st.session_state.df = df
         st.session_state.mmnt_ids = sorted(df["mmnt_id"].unique())
     if "labels" not in st.session_state:
-        st.session_state.labels = parse_labels_file(labels_file) if labels_file is not None else {}
+        st.session_state.labels = {}
+    if labels_file is not None:
+        labels_file_key = (labels_file.name, labels_file.size)
+        if st.session_state.get("_labels_file_key") != labels_file_key:
+            parsed = parse_labels_file(labels_file)
+            st.session_state.labels = {**parsed, **st.session_state.labels}
+            st.session_state._labels_file_key = labels_file_key
     if "current_idx" not in st.session_state:
         st.session_state.current_idx = 0
 
