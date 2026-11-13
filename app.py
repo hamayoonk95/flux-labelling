@@ -15,16 +15,19 @@ import streamlit as st
 
 REASON_CODES = [
     "PASS",
+    "UNEXPECTED_BASELINE",
+    "STARTING_DEADBAND",
+    "UNEXPECTED_RESPONSE",
+    "POSSIBLE_LEAK",
+    "INCORRECT_MODEL",
+    "END_DEADBAND",
     "LOW_SIGNAL",
-    "CO2_LIMITATION",
     "POOR_FIT",
+    "CO2_LIMITATION",
     "TEMPERATURE_CHANGE",
     "PRESSURE_CHANGE",
-    "POSSIBLE_LEAK",
-    "UNEXPECTED_RESPONSE",
     "INSTRUMENT_WARNING",
 ]
-
 CONTEXT_COLS = [
     "mmnt_id",
     "datect",
