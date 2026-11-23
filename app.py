@@ -42,8 +42,7 @@ CONTEXT_COLS = [
 REQUIRED_COLUMNS = sorted(set(CONTEXT_COLS + [
     "t", "exclude",
     "chi_co2", "chi_pred_co2", "f_co2", "r2_f_co2", "rmse_f_co2", "sigma_f_co2", "linear",
-    "chi_n2o", "chi_pred_n2o", "f_n2o", "r2_f_n2o", "rmse_f_n2o", "sigma_f_n2o",
-    "chi_ch4", "chi_pred_ch4", "f_ch4", "r2_f_ch4", "rmse_f_ch4", "sigma_f_ch4",
+    "chi_h2o",
     "TA", "T_cavity", "P_cavity",
 ]))
 
@@ -254,9 +253,12 @@ st.divider()
 st.header("Plots")
 
 # ===========================================================================
-# Row 1: Gas Fits
+# Single row: CO2 fit, H2O, Chamber Conditions
 # ===========================================================================
-co2_col, ch4_col, n2o_col = st.columns(3)
+co2_col, h2o_col, chamber_col = st.columns(3)
+
+f_co2 = first_row["f_co2"]
+f_co2_text = "n/a" if pd.isna(f_co2) else f"{f_co2:.3g}"
 
 with co2_col:
     fig_co2 = go.Figure()
@@ -282,7 +284,7 @@ with co2_col:
     )
 
     fig_co2.update_layout(
-        title="CO₂",
+        title=f"CO₂  (f_co2 = {f_co2_text})",
         xaxis_title="t (s)",
         yaxis_title="chi_co2",
         height=250,
@@ -291,79 +293,6 @@ with co2_col:
     )
 
     st.plotly_chart(fig_co2, width="stretch")
-
-with ch4_col:
-    fig_ch4 = go.Figure()
-
-    fig_ch4.add_trace(
-        go.Scatter(
-            x=plot_df["t"],
-            y=plot_df["chi_ch4"],
-            mode="markers",
-            name="Raw",
-            marker=dict(color="orange", size=5),
-        )
-    )
-
-    fig_ch4.add_trace(
-        go.Scatter(
-            x=plot_df["t"],
-            y=plot_df["chi_pred_ch4"],
-            mode="lines",
-            name="Fit",
-            line=dict(color="red", dash="dash"),
-        )
-    )
-
-    fig_ch4.update_layout(
-        title="CH₄",
-        xaxis_title="t (s)",
-        yaxis_title="chi_ch4",
-        height=250,
-        margin=dict(l=10, r=10, t=60, b=10),
-        showlegend=False,
-    )
-
-    st.plotly_chart(fig_ch4, width="stretch")
-
-with n2o_col:
-    fig_n2o = go.Figure()
-
-    fig_n2o.add_trace(
-        go.Scatter(
-            x=plot_df["t"],
-            y=plot_df["chi_n2o"],
-            mode="markers",
-            name="Raw",
-            marker=dict(color="green", size=5),
-        )
-    )
-
-    fig_n2o.add_trace(
-        go.Scatter(
-            x=plot_df["t"],
-            y=plot_df["chi_pred_n2o"],
-            mode="lines",
-            name="Fit",
-            line=dict(color="red", dash="dash"),
-        )
-    )
-
-    fig_n2o.update_layout(
-        title="N₂O",
-        xaxis_title="t (s)",
-        yaxis_title="chi_n2o",
-        height=250,
-        margin=dict(l=10, r=10, t=60, b=10),
-        showlegend=False,
-    )
-
-    st.plotly_chart(fig_n2o, width="stretch")
-
-# ===========================================================================
-# Row 2: H2O and Chamber Conditions
-# ===========================================================================
-_, h2o_col, chamber_col, _ = st.columns([0.5, 1, 1, 0.5 ])
 
 # ---------------------------------------------------------------------------
 # H2O
