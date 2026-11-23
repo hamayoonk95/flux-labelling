@@ -352,21 +352,17 @@ with chamber_col:
     fig_chamber.update_layout(
         title="Chamber Conditions",
         xaxis_title="t (s)",
-        yaxis=dict(title="T_cavity"),
+        # No legend (it overlapped the title in a narrow column); axis titles
+        # are coloured to match their lines instead.
+        yaxis=dict(title=dict(text="T_cavity", font=dict(color="darkorange"))),
         yaxis2=dict(
-            title="P_cavity",
+            title=dict(text="P_cavity", font=dict(color="steelblue")),
             overlaying="y",
             side="right",
         ),
         height=250,
         margin=dict(l=10, r=10, t=60, b=10),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="center",
-            x=0.5,
-        ),
+        showlegend=False,
     )
 
     st.plotly_chart(fig_chamber, width="stretch")
